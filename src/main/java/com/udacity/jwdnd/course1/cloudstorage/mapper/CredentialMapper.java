@@ -25,4 +25,6 @@ public interface CredentialMapper {
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialId}")
     void deleteCredentialByCredentialId(Integer credentialId);
 
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialId} AND userid = #{userId}")
+    void deleteCredentialByCredentialIdAndUserId(Integer credentialId, Integer userId);
 }
