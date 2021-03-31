@@ -11,9 +11,19 @@
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container">
             <div id="logoutDiv">
-                <form action="#" method="POST">
+                <form action="#" th:action="@{/logout}" method="POST">
                     <button type="submit" class="btn btn-secondary float-right">Logout</button>
                 </form>
+            </div>
+            <div id="messageDiv" style="padding-top: 1em; clear: right;">
+                <div th:if="${success}" class="alert alert-success fill-parent">
+                    <h1 class="display-5">Success</h1>
+                    <span th:text="${message}">Your changes were successfully saved.</span>
+                </div>
+                <div th:if="${error}" class="alert alert-danger fill-parent">
+                    <h1 class="display-5">Error</h1>
+                    <span th:text="${message}">Your changes were not saved.</span>
+                </div>
             </div>
             <div id="contentDiv" style="clear: right;">
                 <nav style="clear: right;">
@@ -25,7 +35,7 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                        <form action="#" enctype="multipart/form-data" method="POST">
+                        <form action="#" th:action="@{/file/upload}" enctype="multipart/form-data" method="POST">
                             <div class="container">
                                 <div class="row" style="margin: 1em;">
                                     <div class="col-sm-2">
@@ -49,12 +59,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="userFile : ${userFiles}">
                                     <td>
-                                        <a target="_blank" class="btn btn-success">View</a>
-                                        <a  class="btn btn-danger">Delete</a>
+                                        <a th:href="@{'/file/download/' + ${userFile.fileId}}" target="_blank" class="btn btn-success">View</a>
+                                        <a th:href="@{'/file/delete/' + ${userFile.fileId}}" class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row">ExampleFile.txt</th>
+                                    <th th:text="${userFile.fileName}" scope="row"></th>
                                 </tr>
                                 </tbody>
                             </table>
@@ -75,13 +85,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr th:each="userNote : ${userNotes}">
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <button type="button" class="btn btn-success" th:onclick="showNoteModal([[${userNote.noteId}]], [[${userNote.noteTitle}]], [[${userNote.noteDescription}]])">Edit</button>
+                                            <a th:href="@{'/note/delete/' + ${userNote.noteId}}" class="btn btn-danger">Delete</a>
                                         </td>
-                                        <th scope="row">Example Note Title</th>
-                                        <td>Example Note Description </td>
+                                        <th th:text="${userNote.noteTitle}" scope="row"></th>
+                                        <td th:text="${userNote.noteDescription}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -97,7 +107,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form th:action="@{/note/save}" action="#" method="POST">
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
@@ -134,14 +144,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="userCredential : ${userCredentials}">
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <button type="button" class="btn btn-success"
+                                                th:onclick="showCredentialModal([[${userCredential.credentialId}]],
+                                                                                [[${userCredential.url}]],
+                                                                                [[${userCredential.username}]],
+                                                                                [[${encryptionService.decryptValue(
+                                                                                        userCredential.password,
+                                                                                        userCredential.key)}]]
+                                                                                )">Edit</button>
+                                        <a th:href="@{'/note/delete/' + ${userCredential.credentialId}}" class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th th:text="${userCredential.url}" scope="row"></th>
+                                    <td th:text="${userCredential.username}"></td>
+                                    <td th:text="${userCredential.password}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -157,7 +174,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form th:action="@{/credential/save}" action="#" method="POST">
                                             <input type="hidden" name="credentialId" id="credential-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
