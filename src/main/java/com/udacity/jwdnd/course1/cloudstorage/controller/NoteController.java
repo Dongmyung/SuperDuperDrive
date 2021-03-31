@@ -20,7 +20,7 @@ public class NoteController {
     }
 
     @PostMapping("/note/save")
-    public String savePost(@ModelAttribute UserNote userNote,
+    public String saveNote(@ModelAttribute UserNote userNote,
                            Authentication authentication,
                            RedirectAttributes redirectAttributes) {
 
