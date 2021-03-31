@@ -28,6 +28,8 @@ public class CredentialController {
                            Authentication authentication,
                            RedirectAttributes redirectAttributes) {
 
+        redirectAttributes.addFlashAttribute("activeTab", "credentials");
+
         Integer userId = userService.getUser(authentication.getName()).getUserId();
         userCredential.setUserId(userId);
 
@@ -51,6 +53,8 @@ public class CredentialController {
     public String deleteCredential(@PathVariable("credentialId") Integer credentialId,
                              Authentication authentication,
                              RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("activeTab", "credentials");
 
         Integer userId = userService.getUser(authentication.getName()).getUserId();
 

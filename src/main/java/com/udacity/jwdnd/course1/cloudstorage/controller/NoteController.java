@@ -24,6 +24,8 @@ public class NoteController {
                            Authentication authentication,
                            RedirectAttributes redirectAttributes) {
 
+        redirectAttributes.addFlashAttribute("activeTab", "notes");
+
         Integer userId = userService.getUser(authentication.getName()).getUserId();
         userNote.setUserId(userId);
 
@@ -47,6 +49,8 @@ public class NoteController {
     public String deleteNote(@PathVariable("noteId") Integer noteId,
                              Authentication authentication,
                              RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("activeTab", "notes");
 
         Integer userId = userService.getUser(authentication.getName()).getUserId();
 
