@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -36,6 +37,10 @@ public class CredentialPage {
     @FindBy(id = "credentialSubmit")
     private WebElement credentialSubmit;
 
+    @FindBy(id = "credentialTable")
+    private WebElement credentialTable;
+
+
     public  CredentialPage(WebDriver webDriver) {
         this.webDriver = webDriver;
         PageFactory.initElements(webDriver, this);
@@ -54,7 +59,8 @@ public class CredentialPage {
     }
 
     public void editCredential(int idx, String url, String username, String password) {
-        ((JavascriptExecutor) webDriver).executeScript("arguments[" + idx + "].click();", editCredentialButtons);
+        if (idx < 0 || idx > getCredentialSize()) return;
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", editCredentialButtons.get(idx));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + url + "';", credentialUrl);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + username + "';", credentialUsername);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + password + "';", credentialPassword);
@@ -62,7 +68,35 @@ public class CredentialPage {
     }
 
     public void deleteCredential(int idx) {
-        ((JavascriptExecutor) webDriver).executeScript("arguments[" + idx + "].click();", deleteCredentialButtons);
+        if (idx < 0 || idx > getCredentialSize()) return;
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", deleteCredentialButtons.get(idx));
+    }
+
+    public int getCredentialSize() {
+        List<WebElement> credentialUrls = credentialTable.findElements(By.className("td-credential-url"));
+        return credentialUrls.size();
+    }
+
+    public boolean hasCredentials() {
+        return getCredentialSize() != 0;
+    }
+
+    public String getUrl(int idx) {
+        if (idx < 0 || idx >= getCredentialSize()) return null;
+        List<WebElement> credentialUrls = credentialTable.findElements(By.className("td-credential-url"));
+        return credentialUrls.get(idx).getText();
+    }
+
+    public String getUsername(int idx) {
+        if (idx < 0 || idx >= getCredentialSize()) return null;
+        List<WebElement> credentialUrls = credentialTable.findElements(By.className("td-credential-username"));
+        return credentialUrls.get(idx).getText();
+    }
+
+    public String getPassword(int idx) {
+        if (idx < 0 || idx >= getCredentialSize()) return null;
+        List<WebElement> credentialUrls = credentialTable.findElements(By.className("td-credential-password"));
+        return credentialUrls.get(idx).getText();
     }
 
 }

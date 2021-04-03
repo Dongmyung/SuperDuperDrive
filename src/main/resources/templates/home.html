@@ -90,7 +90,7 @@
                                             <button type="button" class="btn btn-success edit-note-button" th:onclick="showNoteModal([[${userNote.noteId}]], [[${userNote.noteTitle}]], [[${userNote.noteDescription}]])">Edit</button>
                                             <a th:href="@{'/note/delete/' + ${userNote.noteId}}" class="btn btn-danger delete-note-button">Delete</a>
                                         </td>
-                                        <th th:text="${userNote.noteTitle}" id="td-note-title" scope="row"></th>
+                                        <th th:text="${userNote.noteTitle}" class="td-note-title" scope="row"></th>
                                         <td th:text="${userNote.noteDescription}" class="td-note-description"></td>
                                     </tr>
                                 </tbody>
@@ -156,9 +156,9 @@
                                                                                 )">Edit</button>
                                         <a th:href="@{'/credential/delete/' + ${userCredential.credentialId}}" class="btn  delete-credential-button">Delete</a>
                                     </td>
-                                    <th th:text="${userCredential.url}" scope="row"></th>
-                                    <td th:text="${userCredential.username}"></td>
-                                    <td th:text="${userCredential.password}"></td>
+                                    <th th:text="${userCredential.url}" class="td-credential-url" scope="row"></th>
+                                    <td th:text="${userCredential.username}" class="td-credential-username"></td>
+                                    <td th:text="${userCredential.password}" class="td-credential-password"></td>
                                 </tr>
                                 </tbody>
                             </table>

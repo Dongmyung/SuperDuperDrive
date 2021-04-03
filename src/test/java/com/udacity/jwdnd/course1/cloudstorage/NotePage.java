@@ -36,8 +36,9 @@ public class NotePage {
     @FindBy(id = "noteSubmit")
     private WebElement noteSubmit;
 
-    @FindBy(id = "notes-table-body")
-    private WebElement noteTableBody;
+    @FindBy(id = "noteTable")
+    private WebElement noteTable;
+
 
     public  NotePage(WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -56,21 +57,36 @@ public class NotePage {
     }
 
     public void editNote(int idx, String title, String description) {
-//        this.editNoteButtons.get(idx).click();
-        ((JavascriptExecutor) webDriver).executeScript("arguments[" + idx + "].click();", editNoteButtons);
+        if (idx < 0 || idx > getNoteSize()) return;
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", editNoteButtons.get(idx));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + title + "';", noteTitle);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value='" + description + "';", noteDescription);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", noteSubmit);
     }
 
     public void deleteNote(int idx) {
-        ((JavascriptExecutor) webDriver).executeScript("arguments[" + idx + "].click();", deleteNoteButtons);
-//        this.deleteNoteButtons.get(idx).click();
+        if (idx < 0 || idx >= getNoteSize()) return;
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", deleteNoteButtons.get(idx));
+    }
+
+    public int getNoteSize() {
+        List<WebElement> noteTitles = noteTable.findElements(By.className("td-note-title"));
+        return noteTitles.size();
     }
 
     public boolean hasNotes() {
-        List<WebElement> noteTitles = noteTableBody.findElements(By.id("td-note-title"));
-        System.out.println("test:" + noteTitles.size());
-        return noteTitles.size() != 0;
+        return getNoteSize() != 0;
+    }
+
+    public String getTitle(int idx) {
+        if (idx < 0 || idx >= getNoteSize()) return null;
+        List<WebElement> noteTitles = noteTable.findElements(By.className("td-note-title"));
+        return noteTitles.get(idx).getText();
+    }
+
+    public String getDescription(int idx) {
+        if (idx < 0 || idx >= getNoteSize()) return null;
+        List<WebElement> noteDescriptions = noteTable.findElements(By.className("td-note-description"));
+        return noteDescriptions.get(idx).getText();
     }
 }
