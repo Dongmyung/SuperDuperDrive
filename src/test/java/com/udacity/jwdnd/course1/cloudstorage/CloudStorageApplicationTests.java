@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
@@ -62,18 +63,21 @@ class CloudStorageApplicationTests {
 
 
 	@Test
+	@Order(1)
 	public void getLoginPage() {
 		driver.get(loginUrl);
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
+	@Order(2)
 	public void goHomePageWithoutLoggedIn() {
 		driver.get(homeUrl);
 		Assertions.assertNotEquals("Home", driver.getTitle());
 	}
 
 	@Test
+	@Order(3)
 	public void signupAndVerifyAccessible() {
 		// Signup and Login
 		signupThenLogIn();
@@ -91,6 +95,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(4)
 	public void createAndVerifyNote() {
 		// Signup and Login
 		signupThenLogIn();
@@ -105,6 +110,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(5)
 	public void editAndVerifyNote() {
 		// Signup and Login
 		signupThenLogIn();
@@ -124,6 +130,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(6)
 	public void deleteAndVerifyNote() {
 		// Signup and Login
 		signupThenLogIn();
@@ -135,15 +142,15 @@ class CloudStorageApplicationTests {
 		notePage.addNote("note", "note description for test");
 		notePage.addNote("note 2", "note description for test 2");
 		notePage.clickNoteTab();
-		Assertions.assertEquals(2, notePage.getNoteSize());
+		int numNotes = notePage.getNoteSize();
 		notePage.deleteNote(1);
 		notePage.clickNoteTab();
-		Assertions.assertEquals(1, notePage.getNoteSize());
-		Assertions.assertEquals(null, notePage.getTitle(1));
+		Assertions.assertEquals((numNotes - 1), notePage.getNoteSize());
 	}
 
 
 	@Test
+	@Order(7)
 	public void createAndVerifyCredential() {
 		// Signup and Login
 		signupThenLogIn();
@@ -158,6 +165,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(8)
 	public void editAndVerifyCredential() {
 		// Signup and Login
 		signupThenLogIn();
@@ -176,6 +184,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(9)
 	public void deleteAndVerifyCredential() {
 		// Signup and Login
 		signupThenLogIn();
@@ -187,11 +196,11 @@ class CloudStorageApplicationTests {
 		credentialPage.addCredential("www.udacity.com","testuser", "testpass");
 		credentialPage.addCredential("www.google.com","testuser", "testpass2");
 		credentialPage.clickCredentialTab();
-		Assertions.assertEquals(2, credentialPage.getCredentialSize());
+		int numCredential = credentialPage.getCredentialSize();
 		credentialPage.deleteCredential(1);
 		credentialPage.clickCredentialTab();
-		Assertions.assertEquals(1, credentialPage.getCredentialSize());
-		Assertions.assertEquals(null, credentialPage.getUrl(1));
+		Assertions.assertEquals((numCredential - 1), credentialPage.getCredentialSize());
+
 	}
 
 
