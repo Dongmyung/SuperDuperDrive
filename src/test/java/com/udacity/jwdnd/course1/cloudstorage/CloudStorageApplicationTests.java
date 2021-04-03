@@ -172,7 +172,7 @@ class CloudStorageApplicationTests {
 		credentialPage.editCredential(1,"www.github.com", "derek", "testpass");
 		credentialPage.clickCredentialTab();
 		Assertions.assertEquals("www.github.com", credentialPage.getUrl(1));
-		Assertions.assertEquals("edit", credentialPage.getUsername(1));
+		Assertions.assertEquals("derek", credentialPage.getUsername(1));
 	}
 
 	@Test
